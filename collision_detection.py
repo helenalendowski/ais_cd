@@ -1,47 +1,267 @@
 import pynmea2
-from pyais import *
-from math import radians, cos, sin, asin, sqrt
+from pyais import *         # https://pypi.org/project/pyais/
+import socket       # socket programming library
+import serial       # install pyserial
+import pandas as pd
+import sys
+from arpaocalc import Ship, ARPA_calculations   # math functions to calculate cpa & tcpa
+import time
+#import RPi.GPIO as GPIO        # library to control raspberry pi LED
+import winsound
+
+'''
+     First configure SDRAngle settings for RTLSDR-USB to receive AIS messages
+     Adjust GPS port path 
+     Start this ship collision avoidance script 
+          Script connects to SDRAngel through UDP
+          Saves receiving AIVDM messages in dataframe 
+          Collects position(lat,lon), speed and heading of own ship and other vessels
+          Calculates the closest time of approach (cpa) and time to closest time of approach (tcpa) of own ship to other targets
+          Sends a signal if there is a possible collision
+
+     Messages types of interest for collisions:
+          1: Position Report Class A
+          2: Position Report Class A (Assigned schedule)
+          3: Position Report Class A (Response to interrogation)
+          5: Static and Voyage Related Data 
+          18: Standard Class B CS Position Report
+          19: Extended Class B Equipment Position Report
+          24: Static Data Report 
+          
+    This script supports message type 1,2,3,18, and 19.
+    Static and voyage related data of other vessels is not yet included, since data has to be configured by vessel owners and often isin't defined. 
+     
+     Columns of position reports     
+          class A (1,2,3): [msg_type, repeat, mmsi, status, turn, speed, accuracy, lon, lat, course, heading, second, maneuver, spare_1, raim, radio] 
+          class B (18): [msg_type, repeat, mmsi, reserved_1, speed, accuracy, lon, lat, course, heading, second, reserved_2, cs, display, dsc, band, msg22, assigned, raim, radio] 
+  
+    STDMA (Self Organized Time Division Multiple Access) technique ensures that report from one AIS station fits into one of 
+    2250 time slots of 26.6 milliseconds established every 60 seconds on each frequency. 
+    Therefore, this script listens to socket for 60 seconds before calculating the closest points of approach.
+'''
+
+dataframe = pd.DataFrame()      # global variable to store AIS incoming messages
+seconds_to_listen = 60          # global variable to receive AIS messages for 60s before running collision test
+min_distance = 0.2159827  # minimum distance in nautical mile;     0.00108 Nm = 2m         0.2159827 Nm = 400m
+
+def convert_pos_to_dd(lat, lat_dir, lon, lon_dir):
+    '''
+    :param lat: has the format 'DDMM.MMMMM' string
+    :param lat_dir: 'N' or 'S' (North/South)
+    :param lon: has the format 'DDDMM.MMMMM' string
+    :param lon_dir: 'E' or 'W' (East/West)
+    :return: lat, lon in decimal degrees using the formula: decimal = degrees + minutes / 60.0 + seconds / 3600.0
+    '''
+
+    direction = {'N': 1, 'S': -1, 'E': 1, 'W': -1}
+    try:
+        lat_degrees = int(lat[:2])
+        lat_minutes = float(lat[2:])
+        #print(f'lat: {lat}, lat_dir: {lat_dir};     lat_degrees: {lat_degrees}, lat_minutes: {lat_minutes}')
+
+        lat_decimal = (lat_degrees + lat_minutes / 60.0) * direction[lat_dir]
+        lat_decimal = round(lat_decimal, 5)
+        #print(f'lat_decimal: {round(lat_decimal,5)}')
+
+        lon_degrees = int(lon[:3])
+        lon_minutes = float(lon[3:])
+        #print(f'lon: {lon}, lon_dir: {lon_dir};     lon_degrees: {lon_degrees}, lon_minutes: {lon_minutes}')
+
+        lon_decimal = (lon_degrees + lon_minutes / 60.0) * direction[lon_dir]
+        lon_decimal = round(lon_decimal, 5)
+        #print(f'lon_decimal: {round(lon_decimal,5)}')
+
+        return lat_decimal, lon_decimal
+
+    except ValueError as ve:
+        #print('Value error: {}'.format(ve))
+        print(f'Arguments (lat: {lat} and lon: {lon}) are not valid.')
+        return None, None
 
 
-def haversine(lat1, lon1, lat2, lon2):
-    """
-        Calculate the great circle distance between two points on the earth (specified in decimal degrees)
-        If both points are in the same hemisphere (N or S), the latitudes must be subtracted to obtain the difference in latitude.
-        If both points are in different hemispheres (N or S), the latitudes must be added to obtain the difference in latitude.
-        Same counts for longitudes in the same/different hemisphere/s (W or E)
-        Note: different hemispheres can be neglected, since boats in AIS range are probably in the same hemisphere.
-        (especially since this script is for German waters).
-        Function returns the distance between two points in meters.
-    """
-    r = 6371  # Earth radius in kilometers km; it ranges from nearly 6378 km to nearly 6357 km
+class SerialGPS:
+    '''
+        Serial GPS class. To connect to usb device find out the port and baud rate of your device.
+        My gps device: NL-8012U (NaviLock)
+        E.g., port path: '/dev/ttyUSB0' on Linux or 'COM6' on Windows
+        E.g., typical baud rates: 75, 110, 300, 1200, 2400, 4800, 9600, 19200, 38400, 57600 and 115200 bit/s
+    '''
+    def __init__(self, port, baudrate):
+        self.port = serial.Serial(port, baudrate)
+        if not self.port.isOpen():
+            self.port.open()
 
-    d_lat = radians(lat2 - lat1)
-    d_lon = radians(lon2 - lon1)
-    lat1 = radians(lat1)
-    lat2 = radians(lat2)
+    def port_open(self):
+        if not self.port.isOpen():
+            self.port.open()
+            print('Serial port is open.')
 
-    a = sin(d_lat / 2) ** 2 + cos(lat1) * cos(lat2) * sin(d_lon / 2) ** 2
-    c = 2 * asin(sqrt(a))
+    def port_close(self):
+        self.port.close()
+        print('Serial port is closed.')
 
-    return c * r * 1000
+    def serial_reader(self):
+    #global pos_GPS
+        while True:
+            try:
+                data = self.port.readline()
+                msg = data.decode(encoding='latin1').replace("\n", "").replace("\r", "")
+                if (msg.startswith("$GNRMC")):
+                    gnrmc = pynmea2.parse(msg)
+                    #print(repr(gnrmc))
+
+                    if gnrmc.spd_over_grnd is None:               # if speed is not defined set speed to zero
+                        speed = 0.0000
+                    else:
+                        speed = float(gnrmc.spd_over_grnd)      # TODO: Problem gps speed is greater 0.1 without moving
+
+                    if gnrmc.true_course is None:                 # if course is not defined set course to zero
+                        course = 0.0000
+                    else:
+                        course = float(gnrmc.true_course)
+
+                    lat, lon = convert_pos_to_dd(gnrmc.lat, gnrmc.lat_dir, gnrmc.lon, gnrmc.lon_dir)
+
+                    if lat is None:
+                        print(f'Input lat = {gnrmc.lat}; lon = {gnrmc.lon} are not valid for convert_pos_to_dd()')
+                        continue
+                    else:
+                        return {'lat': lat, 'lon': lon, 'speed': speed, 'course': course}
+
+            except serial.SerialException as e:
+                print('Device error: {}'.format(e))
+                break
+            except pynmea2.ParseError as e:
+                print('Parse error: {}'.format(e))
+                continue
 
 
-#gps_msg = '$GNGGA,075226.00,6012.57453,N,02458.65314,E,1,07,2.08,59.3,M,17.7,M,,*7E'
-gps_msg = '$GNRMC,075226.00,A,6012.57453,N,02458.65314,E,0.624,,220922,,,A*68'
-gga = pynmea2.parse(gps_msg)
-print(gga.latitude)
-print(gga.longitude)
-#print(gga.timestamp)
-print(repr(gga))
+def socket_reader(sock):
+    '''
+    :param sock: UDP socket
+    :return: none
 
-# receives !AIVDM Messages
-ship_msg = '!AIVDM,1,1,,,33KKKd0P@S1j>rTRKGadvrAF01u@,0*14'       # sample aivdm message
-decoded = decode(ship_msg)
-print(decoded)
-#print(decoded.speed)
-#data = decoded.asdict()
-#print(data)
-#print(data['speed'])
+    Function to receive NMEA AIS sentences (!AIVDM/!AIVDO) from SDRAngle via UDP socket.
+    In SDRAnge enable UDP via '127.0.0.1 : 5005' and select Format: 'NMEA'
+    Stores incoming ship data in global dataframe.
+    '''
 
-distance = haversine(decoded.lat, decoded.lon, gga.latitude, gga.longitude)
-print(f'The distance between the coordinates is {distance} m.')
+    global dataframe
+    global seconds_to_listen
+    t_end = time.time() + seconds_to_listen
+    supported_msg_types = [1, 2, 3, 18, 19]         # AIS message types that are position reports
+
+    while time.time() < t_end:                      # run for a defined amount of seconds
+        try:
+            # receive AIS NMEA sentences
+            data, address = sock.recvfrom(1024)     # reserve bits for data
+            # print(f'Data: {data}; Address: {address}')
+            msg = data.decode(encoding='latin1').replace("\n", "").replace("\r", "")
+            decoded = decode(msg)           # pyais decode message function
+            data_dict = decoded.asdict()
+
+            df = pd.DataFrame(data_dict, index=[0])
+            df.set_index('mmsi', inplace=True)  # use the Maritime Mobile Service Identity (MMSI) number of the vessel or base station as index
+
+            if decoded.msg_type in supported_msg_types:
+                #print('Position report class A or class B')
+
+                if not len(dataframe.index) == 0:  # if not dataframe.empty
+                    if decoded.mmsi in dataframe.index:  # check if ship is already in dataframe
+                        # print('Ship is already in database')
+                        dataframe = dataframe.drop(decoded.mmsi)  # delete old ship entry
+
+                dataframe = pd.concat([dataframe, df])  # append dataframe with new ship entry
+                # print(dataframe)
+        except :
+            # print('Pyais error. Invalid NMEA message.')
+            continue
+
+
+def check_collision(cpa, tcpa):
+    global min_distance              # minimum distance in nautical mile
+
+    if (abs(cpa) < min_distance):  # CPA result is expressed in nautical miles; abs(cpa) cause value is positive or negative corresponding to CPA position ahead or astern the ship's beam
+        print('Collision detected in ', tcpa, 'minutes.')
+        return 1
+    else:
+        return 0
+
+
+# connect to gps: adjust path to gps usb device port. For my setup on Windows it's port COM6
+MyGPS = SerialGPS("COM6", 9600)
+
+# create UDP socket/ server
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+server_address = ('localhost', 5005)                    # define ip address and a port according to settings in SDRangle
+print(f'Starting up on {server_address[0]} port {server_address[1]}')
+sock.bind(server_address)
+
+# create a dataframe to store all closest points of approach
+all_cpa = pd.DataFrame()
+
+running = True
+
+try:
+    while running:
+        # receive AIS messages
+        print(f'Collecting ship position reports for {seconds_to_listen} seconds.')
+        socket_reader(sock)
+
+        # get own ship position
+        pos_GPS = MyGPS.serial_reader()
+        print(f'Own ship position data: {pos_GPS}')
+        objectA = Ship((pos_GPS['lon'], pos_GPS['lat']), pos_GPS['speed'], pos_GPS['course'])
+
+        #print(dataframe)
+        for i, row in dataframe.iterrows():
+            print('MMSI', i, ';', 'lat =', row['lat'], ';', 'lon =', row['lon'], ';', 'accuracy =', row['accuracy'], ';', 'speed =', row['speed'], ';',
+                  'course =', row['course'], ';', 'heading =', row['heading'])
+
+            if (row['heading'] == 511):     # hading: 511 = N/A, otherwise heading: 0 to 359 degrees
+                heading = row['course']     # NOTE: This is always the case!
+                # print('heading not available, set heading to course =', row['course'])
+            else:
+                heading = row['heading']
+
+            # Ship(position(longitude and latitude in decimal degrees), Speed in knots, heading in degrees)
+            objectB = Ship((row['lon'], row['lat']), row['speed'], heading)
+
+            # ARPA_calculations returns the CPA (closest point of approach) nautical miles and TCPA (time to closest point of approach) in minutes
+            results = ARPA_calculations(objectA, objectB)
+
+            collision = check_collision(results['cpa'], results['tcpa'])
+
+            row_data = {'cpa (Nm)': results['cpa'], 'tcpa (min)': results['tcpa'], 'collision': collision}
+
+            if (len(all_cpa.index) != 0) and (i in all_cpa.index):     # check if the ship already exists in dataframe: all_cpa
+                 all_cpa.loc[i] = row_data
+                 # print('Vessel entry already exists. Values updated.')
+            else:
+                row_dataframe = pd.DataFrame(data=row_data, columns=['cpa (Nm)', 'tcpa (min)', 'collision'], index=[i])
+                all_cpa = pd.concat([all_cpa, row_dataframe])  # append dataframe with new ship entry
+
+        print(all_cpa)
+
+        if (1 in all_cpa.collision.values):
+            print('Collision warning!')
+            # TODO: Turn on LED on Raspberry Pi
+            #winsound.Beep(440, 2000)  # on Windows creates 440Hz sound that lasts 2000 milliseconds
+        else:
+            print('There are no collisions!')
+            #test_data = {'cpa (Nm)': 0.0001, 'tcpa (min)': 2, 'collision': 1}
+            #test_dataframe = pd.DataFrame(data=test_data, columns=['cpa (Nm)', 'tcpa (min)', 'collision'], index=['123456789'])
+            #all_cpa = pd.concat([all_cpa, row_dataframe])  # append dataframe with new ship entry
+            # TODO: Turn off LED
+
+        print('')
+
+    MyGPS.port_close()
+    sock.close()
+
+except KeyboardInterrupt:
+    MyGPS.port_close()
+    sock.close()
+    print('KeyboardInterrupt. Program exit.')
+    running = False
+

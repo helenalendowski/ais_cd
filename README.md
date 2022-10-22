@@ -3,9 +3,10 @@
 Project description:
     This project implements a simple vessel collision warning system based on AIS data. 
     The script connects to SDRAngel through a UDP socket and saves receiving AIVDM/AIVDO messages in a dataframe. 
-    Decoding messages with the pyais library (https://pypi.org/project/pyais/) to collects position(lat,lon), speed and heading of other vessels.
+    Decoding messages with the pyais library (https://pypi.org/project/pyais/) to collect position(lat,lon), speed and heading of other vessels.
     Receiving the own ship data from a gps dongle and decode with pynmea2 (https://pypi.org/project/pynmea2/).
-    Calculates the closest time of approach (cpa) and time to closest time of approach (tcpa) of own ship to other targets with the ARPAoCALC Python library (https://github.com/nawre/arpaocalc)
+    Calculates the closest time of approach (cpa) and time to closest time of approach (tcpa) of own ship to other targets with 
+    the ARPAoCALC Python library (https://github.com/nawre/arpaocalc) 
     Sends a collision warning if there are possible collisions. 
 
     Hardware requirements: SDR dongle (e.g, RTL-SDR or USRPB210), GPS dongle
@@ -20,14 +21,13 @@ Project description:
           24: Static Data Report 
           
     This script supports message type 1,2,3,18, and 19.
-    Static and voyage related data of other vessels is not yet included, since data has to be configured by vessel owners and often isin't available. 
+    Static and voyage related data of other vessels is not supported, since data has to be configured by vessel owners and often isin't available. 
 
     STDMA (Self Organized Time Division Multiple Access) technique ensures that report from one AIS station fits into one of 
     2250 time slots of 26.6 milliseconds established every 60 seconds on each frequency. 
     Therefore, this script listens to socket for 60 seconds before checking for collisions. 
-    The ARPAoCALC Python library (https://github.com/nawre/arpaocalc) is used to calculate the closest points of approach (cpa) and time to closest point of approach (tcpa).
 
-
+Instructions: 
 1. SDRangle
     1.1 Download SDRAngel from https://www.sdrangel.org/ 
     1.2 Configure SDRAngle settings for RTLSDR-USB to receive AIS messages
@@ -37,7 +37,7 @@ Project description:
     2.2 Adjust values in collision_detection.py
 
 3. Collision warning
-    Adjust minimum distance to other vessels according to your own preference in 
+    Adjust minimum distance (min_distance) in nautical miles to other vessels according to your own preference in collision_detection.py
 
 3. Start SDRAngle 
 4. Run collision_detection.py

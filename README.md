@@ -62,8 +62,10 @@
 
 ### Some useful terminal commands:
 To check your operationg system version and Raspberry model run: 
+    ```
     uname -a
     cat /proc/device-tree/model
+    ```
 Raspberry Pi GPIO pins: 
     pinout
     gpio readall

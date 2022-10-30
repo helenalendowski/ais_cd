@@ -30,7 +30,8 @@
 ## Instructions: 
 1. SDRangle
     1.1 Download SDRAngel from https://www.sdrangel.org/ 
-    1.2 Configure SDRAngle settings for RTLSDR-USB to receive AIS messages
+    1.2 Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux)
+    1.3 See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages
 
 2. GPS set up
     2.1 Find out GPS port and baud rate 
@@ -41,7 +42,7 @@
 4. Run collision_detection.py
 
 
-## Raspberry Pi set up
+## Raspberry Pi 4 
 1. Install OpenPlotter OS on Raspberry Pi 4 https://openplotter.readthedocs.io/en/latest/getting_started/downloading.html. You can follow this [tutorial on YouTube] (https://www.youtube.com/watch?v=WIW1iKOsoGk). 
 1.1 Download OpenPlotter Starting version from: https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq -> unzip the folder
 1.2 Download Raspberry Pi Imager: https://www.raspberrypi.com/software/ and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
@@ -59,7 +60,7 @@
 3.2 The amperage is specified in the [datasheet](https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-datasheet.pdf) with up to 500mA. Calculate resistor: R = U/I. Take the next higher available resistor. The larger the resistance, the more it limits the current.
 3.3 Connect LED cathode (shorter LED leg) to a ground pin. 
 3.4 Connect LED anode (longer LED leg) to the positive supply of the circuit. And adjust GPIO pin (led_pin) in collision_detection.py
-
+4. Install SDRangle, follow the instructions from https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux or https://www.radiosrs.net/installing_SDRangel.html
 ### Some useful terminal commands:
 To check your operationg system version and Raspberry model run: 
 ```

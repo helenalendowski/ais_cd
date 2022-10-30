@@ -62,18 +62,23 @@
 
 ### Some useful terminal commands:
 To check your operationg system version and Raspberry model run: 
-    ```
-    uname -a
-    cat /proc/device-tree/model
-    ```
+```
+uname -a
+cat /proc/device-tree/model
+```
 Raspberry Pi GPIO pins: 
-    pinout
-    gpio readall
-Devices 
-    lsusb
-    dmesg -Hw
-Raspberry Pi software configurations
-    sudo raspi-config
+```
+pinout
+gpio readall
+```
+Devices: 
+```
+lsusb
+dmesg -Hw
+```
+Raspberry Pi software configurations:
+`sudo raspi-config`
+
 
 ### Useful tutorials:
 To get started with Raspberry see for example "Raspberry on a boat - Playlist" (https://www.youtube.com/playlist?list=PLgYS2FpH2f4rLgdJ05F4KAOMvAgsLH1da)

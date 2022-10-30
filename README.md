@@ -22,10 +22,6 @@ AIS messages types of interest for collisions:
 This script supports message type 1,2,3,18, and 19.
 Static and voyage related data of other vessels is not supported, since data has to be configured by vessel owners and often isin't available. 
 
-Supported VHF radio channels
-* Channel A 161.975 MHz (87B)
-* Channel B 162.025 MHz (88B)
-
 STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms established every 60 s on each frequency. Therefore, this script listens to socket for 60 seconds before checking for collisions. 
 
 ## Instructions: 
@@ -33,6 +29,10 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
     * Download SDRAngel from https://www.sdrangel.org/ 
     * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux)
     * See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages. See [YouTube tutorial](https://www.youtube.com/watch?v=rTyzEOBs6oI) to get started. 
+        * VHF channels:    
+            * Channel A 161.975 MHz (87B)
+            * Channel B 162.025 MHz (88B)
+        
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
     * Find out GPS port and baud rate 
     * Adjust values in collision_detection.py according to your GPS device

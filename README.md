@@ -3,10 +3,10 @@
 ## Description:
     This project implements a simple vessel collision warning system based on AIS data. 
     The script connects to SDRAngel through a UDP socket and saves receiving AIVDM/AIVDO messages in a dataframe. 
-    Decoding messages with the pyais library (https://pypi.org/project/pyais/) to collect position(lat,lon), speed and heading of other vessels.
-    Receiving the own ship data from a gps dongle and decode with pynmea2 (https://pypi.org/project/pynmea2/).
+    Decoding messages with the [pyais library](https://pypi.org/project/pyais/) to collect position(lat,lon), speed and heading of other vessels.
+    Receiving the own ship data from a gps dongle and decode with [pynmea2](https://pypi.org/project/pynmea2/).
     Calculates the closest time of approach (cpa) and time to closest time of approach (tcpa) of own ship to other targets with 
-    the ARPAoCALC Python library (https://github.com/nawre/arpaocalc) 
+    the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc) 
     Sends a collision warning if there are possible collisions. 
 
     Hardware requirements: SDR dongle (e.g, RTL-SDR or USRPB210), GPS serial device 

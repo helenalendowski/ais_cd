@@ -43,7 +43,7 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
 
 
 ## Raspberry Pi 4 
-1. Download and install [OpenPlotter OS](https://openplotter.readthedocs.io/en/3.x.x/getting_started/downloading.html) on Raspberry Pi 4. You can follow this [tutorial on YouTube] (https://www.youtube.com/watch?v=WIW1iKOsoGk) or the [OpenPlotter installing instructions](https://openplotter.readthedocs.io/en/latest/getting_started/installing.html). 
+1. Download and install [OpenPlotter OS](https://openplotter.readthedocs.io/en/3.x.x/getting_started/downloading.html) on Raspberry Pi 4. You can follow this [tutorial on YouTube](https://www.youtube.com/watch?v=WIW1iKOsoGk) or the [OpenPlotter installing instructions](https://openplotter.readthedocs.io/en/latest/getting_started/installing.html). 
     * [Download OpenPlotter Starting version](https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq) and unzip the folder
     * Pi only boots from a micro SD card formatted in the "File system: FAT32". Prepare SD card with a [formatter for Windows/Mac OS](https://www.sdcard.org/downloads/formatter/)
     * [Download Raspberry Pi Imager](https://www.raspberrypi.com/software/) and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.

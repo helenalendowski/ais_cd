@@ -42,13 +42,13 @@
 
 
 ## Raspberry Pi 4 
-1. Install OpenPlotter OS on Raspberry Pi 4 https://openplotter.readthedocs.io/en/latest/getting_started/downloading.html. You can follow this [tutorial on YouTube] (https://www.youtube.com/watch?v=WIW1iKOsoGk). 
-1.1 Download OpenPlotter Starting version from: https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq -> unzip the folder
-1.2 Pi only boots from a micro SD card formatted in the "File system: FAT32". Prepare SD card with a [formatter for Windows/Mac OS] (https://www.sdcard.org/downloads/formatter/)
-1.3 Download Raspberry Pi Imager: https://www.raspberrypi.com/software/ and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
+1. Download and install [OpenPlotter OS](https://openplotter.readthedocs.io/en/3.x.x/getting_started/downloading.html) on Raspberry Pi 4. You can follow this [tutorial on YouTube] (https://www.youtube.com/watch?v=WIW1iKOsoGk). 
+1.1 [Download OpenPlotter Starting version](https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq) and unzip the folder
+1.2 Pi only boots from a micro SD card formatted in the "File system: FAT32". Prepare SD card with a [formatter for Windows/Mac OS](https://www.sdcard.org/downloads/formatter/)
+1.3 [Download Raspberry Pi Imager](https://www.raspberrypi.com/software/) and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
 1.4 Put SD card into Raspberry Pi, power it and follow set up wizard (set country, change password (default: "raspberry"), connect to wireless network or plugin network cable, update software).
 1.5 Reboot
-2. Set up gps. you can follow this [tutorial on YouTube](https://www.youtube.com/watch?v=umfw8uLDkc0).
+2. Set up gps. you can follow [this tutorial on YouTube](https://www.youtube.com/watch?v=umfw8uLDkc0).
 2.1 Go to "Pi" -> "OpenPlotter" -> "Serial" -> "Devices"
 2.2 Connect gps dongle to one of the Raspberry Pi ports and click "Refresh"
 2.3 Click on the device, enter an alias in lower case letters at least 4 characters (e.g., "gnss"), select "NMEA 0183" for data and press "Apply"
@@ -60,7 +60,8 @@
 3.2 The amperage is specified in the [datasheet](https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-datasheet.pdf) with up to 500mA. Calculate resistor: R = U/I. Take the next higher available resistor. The larger the resistance, the more it limits the current.
 3.3 Connect LED cathode (shorter LED leg) to a ground pin. 
 3.4 Connect LED anode (longer LED leg) to the positive supply of the circuit. And adjust GPIO pin (led_pin) in collision_detection.py
-4. Install SDRangle, follow the instructions from https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux or https://www.radiosrs.net/installing_SDRangel.html
+4. Install SDRangle, follow the instructions from [Compile-from-source-in-Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux) or [Installing SDRangel for the SDRplay RSP1A and HackRF on a Raspberry Pi](https://www.radiosrs.net/installing_SDRangel.html)
+
 ### Some useful terminal commands:
 To check your operationg system version and Raspberry model run: 
 ```
@@ -82,5 +83,7 @@ Raspberry Pi software configurations:
 sudo raspi-config
 ```
 
-### Useful tutorials:
-To get started with Raspberry see for example "Raspberry on a boat - Playlist" (https://www.youtube.com/playlist?list=PLgYS2FpH2f4rLgdJ05F4KAOMvAgsLH1da)
+### Further useful links:
+[Download OpenSeaMap charts] (https://ftp.gwdg.de/pub/misc/openstreetmap/openseamap/charts/kap/) for OpenCPN and follow [installation instructions] (http://openseamap.smurf.noris.de/index.php?id=opencpn&L=1)
+
+To get started with Raspberry see for example [Raspberry on a boat - Playlist](https://www.youtube.com/playlist?list=PLgYS2FpH2f4rLgdJ05F4KAOMvAgsLH1da)

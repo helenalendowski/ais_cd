@@ -36,14 +36,14 @@ Part of standard library that is distributed with Python 3.11.0:
 * [time](https://docs.python.org/3/library/time.html)
 * [sys](https://docs.python.org/3/library/sys.html)
 * [signal](https://docs.python.org/3/library/signal.html)
-* [winsound](https://docs.python.org/3/library/winsound.html)
+* [winsound](https://docs.python.org/3/library/winsound.html) (Windows only) 
 
 Requires installation: 
 * [pandas](https://pandas.pydata.org/)
 * [pyserial](https://pyserial.readthedocs.io/en/latest/pyserial.html)
 * [pyais](https://pypi.org/project/pyais/) 
 * [pynmea2](https://pypi.org/project/pynmea2/)
-* [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
+* [RPi.GPIO](https://pypi.org/project/RPi.GPIO/) (Raspberry Pi only) 
 
 ## Project set up 
 1. SDRangle

@@ -1,6 +1,6 @@
 # ais_cd
 
-# Project description:
+## Description:
     This project implements a simple vessel collision warning system based on AIS data. 
     The script connects to SDRAngel through a UDP socket and saves receiving AIVDM/AIVDO messages in a dataframe. 
     Decoding messages with the pyais library (https://pypi.org/project/pyais/) to collect position(lat,lon), speed and heading of other vessels.
@@ -31,8 +31,7 @@
 1. SDRangle
     1.1 Download SDRAngel from https://www.sdrangel.org/ 
     1.2 Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux)
-    1.3 See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages
-
+    1.3 See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages. See [YouTube tutorial] (https://www.youtube.com/watch?v=rTyzEOBs6oI) to get started. 
 2. GPS set up
     2.1 Find out GPS port and baud rate 
     2.2 Adjust values in collision_detection.py
@@ -45,16 +44,17 @@
 ## Raspberry Pi 4 
 1. Install OpenPlotter OS on Raspberry Pi 4 https://openplotter.readthedocs.io/en/latest/getting_started/downloading.html. You can follow this [tutorial on YouTube] (https://www.youtube.com/watch?v=WIW1iKOsoGk). 
 1.1 Download OpenPlotter Starting version from: https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq -> unzip the folder
-1.2 Download Raspberry Pi Imager: https://www.raspberrypi.com/software/ and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
-1.3 Put SD card into Raspberry Pi, power it and follow set up wizard (set country, change password (default: "raspberry"), connect to wireless network or plugin network cable, update software).
-1.4 Reboot
+1.2 Pi only boots from a micro SD card formatted in the "File system: FAT32". Prepare SD card with a [formatter for Windows/Mac OS] (https://www.sdcard.org/downloads/formatter/)
+1.3 Download Raspberry Pi Imager: https://www.raspberrypi.com/software/ and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
+1.4 Put SD card into Raspberry Pi, power it and follow set up wizard (set country, change password (default: "raspberry"), connect to wireless network or plugin network cable, update software).
+1.5 Reboot
 2. Set up gps. you can follow this [tutorial on YouTube](https://www.youtube.com/watch?v=umfw8uLDkc0).
 2.1 Go to "Pi" -> "OpenPlotter" -> "Serial" -> "Devices"
 2.2 Connect gps dongle to one of the Raspberry Pi ports and click "Refresh"
 2.3 Click on the device, enter an alias in lower case letters at least 4 characters (e.g., "gnss"), select "NMEA 0183" for data and press "Apply"
 2.4 Go to the "Connections" tab, click on the device and "Add to Signal K", select "AUTO"
 2.5 Go to OpenCPN -> „Options“ -> „Connections“ and apply the Signal K Protocol {Type: Network, Protocol: TCP, Address: localhost, DataPort: 3000, Receive Input on this Port)
-2.6 To test the hardware open "OpenCPN", if everthing is correct you see three green bars in the upper right corner and a red boat icon on the map which is your location. Note: place the gps device close to a window. 
+2.6 To test the hardware open "OpenCPN", if everthing is correct you see three green bars in the upper right corner and a red boat icon on the map which is your location. Note: place the gps device close to a window and away from metal objects to avoid interference. 
 3. Set up LED and find out resistor. Raspberry Pi see [General Purpose Input/Output (GPIO) pins](https://pinout.xyz/#). You need: breadboard, jumper wires, LED, and resistor. 
 3.1 Calculate the difference between the voltage of the Pi (3,3V) and the LED (e.g., 2V): 3.3V - 2V = 1.3V. The higher the voltage, the brighter the LED. 
 3.2 The amperage is specified in the [datasheet](https://datasheets.raspberrypi.com/rpi4/raspberry-pi-4-datasheet.pdf) with up to 500mA. Calculate resistor: R = U/I. Take the next higher available resistor. The larger the resistance, the more it limits the current.

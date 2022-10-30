@@ -21,6 +21,8 @@ Static and voyage related data of other vessels is not supported, since data has
 
 STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms established every 60 s on each frequency. Therefore, this script listens to socket for 60 seconds before checking for collisions. 
 
+test_rtlsdr.py is a start to implement signal processing in Python with [rtlsdr](https://pypi.org/project/pyrtlsdr/) to get rid of the UDP socket and SDRangle -> under construction.
+
 ## Hardware requirements
 * OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
 * SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)) to receive very high frequency (VHF)

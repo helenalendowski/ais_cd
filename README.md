@@ -7,7 +7,7 @@ AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/proj
 The script receives the own ship data from a gps dongle and decodes [NMEA 0183](https://en.wikipedia.org/wiki/NMEA_0183) messages with [pynmea2](https://pypi.org/project/pynmea2/).
 The script then calculates the closest time of approach (cpa) in nautical miles and time to closest time of approach (tcpa) in minutes of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc). If one of the cpa is less than the defined minimum distance to other vessels by the user (= possible collision), the script sends a collision warning (audio signal on Windows using [winsound](https://docs.python.org/3/library/winsound.html) or lights up a led on Raspberry Pi using [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)). 
 
-Hardware requirements: 
+**Hardware requirements:**
 * OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
 * SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)) to receive very high frequency (VHF)
 * VHF antenna

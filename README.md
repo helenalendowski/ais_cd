@@ -1,14 +1,13 @@
 # ais_cd
 
 ## Description:
-This project implements a simple vessel collision warning system based on the [Automatic Identification System (AIS)](https://en.wikipedia.org/wiki/Automatic_identification_system). 
+This project implements a simple vessel collision detection system based on the [Automatic Identification System (AIS)](https://en.wikipedia.org/wiki/Automatic_identification_system). 
 The script connects to [SDRangel](https://www.sdrangel.org/) through a UDP socket and saves receiving [AIVDM/AIVDO messages](https://gpsd.gitlab.io/gpsd/AIVDM.html) in a dataframe. 
-Decoding messages with the [pyais library](https://pypi.org/project/pyais/) to collect position(lat,lon), speed and heading of other vessels.
-Receiving the own ship data from a gps dongle and decode with [pynmea2](https://pypi.org/project/pynmea2/).
-Calculates the closest time of approach (cpa) and time to closest time of approach (tcpa) of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc) 
-Sends a collision warning if there are possible collisions. 
+AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/project/pyais/) to collect the position(latitude, longitude), speed and heading of other vessels.
+The script receives the own ship data from a gps dongle and decodes [NMEA 0183](https://en.wikipedia.org/wiki/NMEA_0183) messages with [pynmea2](https://pypi.org/project/pynmea2/).
+The script then calculates the closest time of approach (cpa) in nautical miles and time to closest time of approach (tcpa) in minutes of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc). If one of the cpa is less than the defined minimum distance to other vessels by the user (= possible collision), the script sends a collision warning (audio signal on Windows using [winsound](https://docs.python.org/3/library/winsound.html) or lights up a led on RaspberryPi using [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)). 
 
-Hardware requirements: SDR dongle (e.g, RTL-SDR or USRPB210), GPS serial device 
+Hardware requirements: SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)), GPS serial device (e.g., [Navilock NL-8012U USB](https://www.navilock.com/produkt/62524/merkmale.html))
 
 AIS messages types of interest for collisions:
     1: Position Report Class A

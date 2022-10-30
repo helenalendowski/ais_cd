@@ -75,7 +75,7 @@ Requires installation:
 1. Download and install [OpenPlotter OS](https://openplotter.readthedocs.io/en/3.x.x/getting_started/downloading.html) on Raspberry Pi 4. You can follow this [tutorial on YouTube](https://www.youtube.com/watch?v=WIW1iKOsoGk) or the [OpenPlotter installing instructions](https://openplotter.readthedocs.io/en/latest/getting_started/installing.html). 
     * [Download OpenPlotter Starting version](https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq) and unzip the folder
     * Pi only boots from a micro SD card formatted in the "File system: FAT32". Prepare SD card with a [formatter for Windows/Mac OS](https://www.sdcard.org/downloads/formatter/)
-    * [Download Raspberry Pi Imager](https://www.raspberrypi.com/software/) and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
+    * [Download Raspberry Pi Imager](https://www.raspberrypi.com/software/) and install it. Run it to write the imager that you just unzipped on the SD card.
     * Put SD card into Raspberry Pi, power it and follow set up wizard (set country, change password (default: "raspberry"), connect to wireless network or plugin network cable, update software).
     * Reboot
 2. Set up gps, you can follow [this tutorial on YouTube](https://www.youtube.com/watch?v=umfw8uLDkc0).

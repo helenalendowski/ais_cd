@@ -7,12 +7,6 @@ AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/proj
 The script receives the own ship data from a gps dongle and decodes [NMEA 0183](https://en.wikipedia.org/wiki/NMEA_0183) messages with [pynmea2](https://pypi.org/project/pynmea2/).
 The script then calculates the closest time of approach (cpa) in nautical miles and time to closest time of approach (tcpa) in minutes of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc). If one of the cpa is less than the defined minimum distance to other vessels by the user (= possible collision), the script sends a collision warning (audio signal on Windows using [winsound](https://docs.python.org/3/library/winsound.html) or lights up a led on Raspberry Pi using [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)). 
 
-**Hardware requirements:**
-* OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
-* SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)) to receive very high frequency (VHF)
-* VHF antenna
-* GPS serial device (e.g., [Navilock NL-8012U USB](https://www.navilock.com/produkt/62524/merkmale.html))
-
 [AIS messages types](https://gpsd.gitlab.io/gpsd/AIVDM.html#_ais_payload_interpretation) of interest for collisions:
 - 1: Position Report Class A
 - 2: Position Report Class A (Assigned schedule)
@@ -26,6 +20,28 @@ This script supports message type 1,2,3,18, and 19.
 Static and voyage related data of other vessels is not supported, since data has to be configured by vessel owners and often is not available. 
 
 STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms established every 60 s on each frequency. Therefore, this script listens to socket for 60 seconds before checking for collisions. 
+
+## Hardware requirements
+* OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
+* SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)) to receive very high frequency (VHF)
+* VHF antenna
+* GPS serial device (e.g., [Navilock NL-8012U USB](https://www.navilock.com/produkt/62524/merkmale.html))
+
+## Python libraries
+Part of standard library that is distributed with Python 3.11.0: 
+* [socket](https://docs.python.org/3/library/socket.html)
+* [time](https://docs.python.org/3/library/time.html)
+* [sys](https://docs.python.org/3/library/sys.html)
+* [signal](https://docs.python.org/3/library/signal.html)
+* [winsound](https://docs.python.org/3/library/winsound.html)
+Part of this project: 
+* [ARPAoCALC](https://github.com/nawre/arpaocalc)
+Requires installation: 
+* [pandas](https://pandas.pydata.org/)
+* [pyserial](https://pyserial.readthedocs.io/en/latest/pyserial.html)
+* [pyais](https://pypi.org/project/pyais/) 
+* [pynmea2](https://pypi.org/project/pynmea2/)
+* [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
 
 ## Instructions: 
 1. SDRangle

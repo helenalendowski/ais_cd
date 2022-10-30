@@ -42,7 +42,7 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
         * "Add channel" -> "AIS Demodulator"
             * delta f: +0,025,000 Hz (AIS channel B 162.025 MHz (88B))
             * [x] UDP 127.0.0.1:5005   Format:NMEA
-        * optional: add feature "AIS" to see vessels in table
+        * optional: "Add feature" -> "AIS" to see vessels in table
         * "Preferences" -> "Save all"
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
     * Find out GPS port and baud rate 

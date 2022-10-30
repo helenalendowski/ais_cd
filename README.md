@@ -14,13 +14,13 @@ Hardware requirements:
 * GPS serial device (e.g., [Navilock NL-8012U USB](https://www.navilock.com/produkt/62524/merkmale.html))
 
 [AIS messages types](https://gpsd.gitlab.io/gpsd/AIVDM.html#_ais_payload_interpretation) of interest for collisions:
-    - 1: Position Report Class A
-    - 2: Position Report Class A (Assigned schedule)
-    - 3: Position Report Class A (Response to interrogation)
-    - 5: Static and Voyage Related Data 
-    - 18: Standard Class B CS Position Report
-    - 19: Extended Class B Equipment Position Report
-    - 24: Static Data Report 
+- 1: Position Report Class A
+- 2: Position Report Class A (Assigned schedule)
+- 3: Position Report Class A (Response to interrogation)
+- 5: Static and Voyage Related Data 
+- 18: Standard Class B CS Position Report
+- 19: Extended Class B Equipment Position Report
+- 24: Static Data Report 
           
 This script supports message type 1,2,3,18, and 19.
 Static and voyage related data of other vessels is not supported, since data has to be configured by vessel owners and often is not available. 

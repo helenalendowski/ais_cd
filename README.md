@@ -34,8 +34,10 @@ Part of standard library that is distributed with Python 3.11.0:
 * [sys](https://docs.python.org/3/library/sys.html)
 * [signal](https://docs.python.org/3/library/signal.html)
 * [winsound](https://docs.python.org/3/library/winsound.html)
+
 Part of this project: 
 * [ARPAoCALC](https://github.com/nawre/arpaocalc)
+
 Requires installation: 
 * [pandas](https://pandas.pydata.org/)
 * [pyserial](https://pyserial.readthedocs.io/en/latest/pyserial.html)

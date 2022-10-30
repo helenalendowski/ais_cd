@@ -5,7 +5,7 @@ This project implements a simple vessel collision detection system based on the 
 The script connects to [SDRangel](https://www.sdrangel.org/) through a UDP socket and saves receiving [AIVDM/AIVDO messages](https://gpsd.gitlab.io/gpsd/AIVDM.html) in a dataframe. 
 AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/project/pyais/) to collect the position(latitude, longitude), speed and heading of other vessels.
 The script receives the own ship data from a gps dongle and decodes [NMEA 0183](https://en.wikipedia.org/wiki/NMEA_0183) messages with [pynmea2](https://pypi.org/project/pynmea2/).
-The script then calculates the closest time of approach (cpa) in nautical miles and time to closest time of approach (tcpa) in minutes of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc). If one of the cpa is less than the defined minimum distance to other vessels by the user (= possible collision), the script sends a collision warning (audio signal on Windows using [winsound](https://docs.python.org/3/library/winsound.html) or lights up a led on RaspberryPi using [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)). 
+The script then calculates the closest time of approach (cpa) in nautical miles and time to closest time of approach (tcpa) in minutes of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc). If one of the cpa is less than the defined minimum distance to other vessels by the user (= possible collision), the script sends a collision warning (audio signal on Windows using [winsound](https://docs.python.org/3/library/winsound.html) or lights up a led on Raspberry Pi using [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)). 
 
 Hardware requirements: 
 * OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
@@ -32,10 +32,16 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
     * Download SDRAngel from https://www.sdrangel.org/ 
     * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux))
     * See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages. See [YouTube tutorial](https://www.youtube.com/watch?v=rTyzEOBs6oI) to get started. 
-        * VHF channels:    
-            * Channel A 161.975 MHz (87B)
-            * Channel B 162.025 MHz (88B)
-        
+        * center frequency: 0,162,000 kHz 
+        * add channel "AIS Demodulator"
+            * delta f: -0,025,000 Hz (AIS channel A 161.975 MHz (87B))
+            * enable UDP 127.0.0.1:5005 Format:NMEA
+        * add channel "AIS Demodulator"
+            * delta f: +0,025,000 Hz (AIS channel B 162.025 MHz (88B))
+            * enable UDP 127.0.0.1:5005 Format:NMEA
+        * sample rate (SR) according to your SDR hardware (e.g., 2,048,000 S/s) samples per second
+        * gain according to your SDR hardware
+        * optional: add feature "AIS" to see vessels in table
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
     * Find out GPS port and baud rate 
     * Adjust values in collision_detection.py according to your GPS device

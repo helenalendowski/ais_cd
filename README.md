@@ -1,6 +1,6 @@
 # ais_cd
 
-## Description:
+## Description
 This project implements a simple vessel collision detection system based on the [Automatic Identification System (AIS)](https://en.wikipedia.org/wiki/Automatic_identification_system). 
 The script connects to [SDRangel](https://www.sdrangel.org/) through a UDP socket and saves receiving [AIVDM/AIVDO messages](https://gpsd.gitlab.io/gpsd/AIVDM.html) in a dataframe. 
 AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/project/pyais/) to collect the position(latitude, longitude), speed and heading of other vessels.
@@ -45,7 +45,7 @@ Requires installation:
 * [pynmea2](https://pypi.org/project/pynmea2/)
 * [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)
 
-## Instructions: 
+## Project set up 
 1. SDRangle
     * Download SDRAngel from https://www.sdrangel.org/ 
     * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux))

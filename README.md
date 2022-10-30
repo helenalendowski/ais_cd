@@ -28,15 +28,15 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
 * GPS serial device (e.g., [Navilock NL-8012U USB](https://www.navilock.com/produkt/62524/merkmale.html))
 
 ## Python libraries
+Copied into this project: 
+* [ARPAoCALC](https://github.com/nawre/arpaocalc)
+
 Part of standard library that is distributed with Python 3.11.0: 
 * [socket](https://docs.python.org/3/library/socket.html)
 * [time](https://docs.python.org/3/library/time.html)
 * [sys](https://docs.python.org/3/library/sys.html)
 * [signal](https://docs.python.org/3/library/signal.html)
 * [winsound](https://docs.python.org/3/library/winsound.html)
-
-Part of this project: 
-* [ARPAoCALC](https://github.com/nawre/arpaocalc)
 
 Requires installation: 
 * [pandas](https://pandas.pydata.org/)

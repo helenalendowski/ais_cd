@@ -32,16 +32,18 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
     * Download SDRAngel from https://www.sdrangel.org/ 
     * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux))
     * See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages. See [YouTube tutorial](https://www.youtube.com/watch?v=rTyzEOBs6oI) to get started. 
+        * "Add Rx device" -> "Select from list" and choose your SDR device (e.g., "RTL-SDR[0]")
         * center frequency: 0,162,000 kHz 
-        * add channel "AIS Demodulator"
-            * delta f: -0,025,000 Hz (AIS channel A 161.975 MHz (87B))
-            * enable UDP 127.0.0.1:5005 Format:NMEA
-        * add channel "AIS Demodulator"
-            * delta f: +0,025,000 Hz (AIS channel B 162.025 MHz (88B))
-            * enable UDP 127.0.0.1:5005 Format:NMEA
         * sample rate (SR) according to your SDR hardware (e.g., 2,048,000 S/s) samples per second
         * gain according to your SDR hardware
+        * "Add channel" -> "AIS Demodulator"
+            * delta f: -0,025,000 Hz (AIS channel A 161.975 MHz (87B))
+            * enable UDP 127.0.0.1:5005 Format:NMEA
+        * "Add channel" -> "AIS Demodulator"
+            * delta f: +0,025,000 Hz (AIS channel B 162.025 MHz (88B))
+            * enable UDP 127.0.0.1:5005 Format:NMEA
         * optional: add feature "AIS" to see vessels in table
+        * "Preferences" -> "Save all"
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
     * Find out GPS port and baud rate 
     * Adjust values in collision_detection.py according to your GPS device

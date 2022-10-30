@@ -27,7 +27,7 @@ STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms
 ## Instructions: 
 1. SDRangle
     * Download SDRAngel from https://www.sdrangel.org/ 
-    * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux)
+    * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux))
     * See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages. See [YouTube tutorial](https://www.youtube.com/watch?v=rTyzEOBs6oI) to get started. 
         * VHF channels:    
             * Channel A 161.975 MHz (87B)

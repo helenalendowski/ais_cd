@@ -1,9 +1,9 @@
 # ais_cd
 
 ## Description
-This project implements a simple vessel collision detection system based on the [Automatic Identification System (AIS)](https://en.wikipedia.org/wiki/Automatic_identification_system). 
-The script connects to [SDRangel](https://www.sdrangel.org/) through a UDP socket and saves receiving [AIVDM/AIVDO messages](https://gpsd.gitlab.io/gpsd/AIVDM.html) in a dataframe. 
-AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/project/pyais/) to collect the position(latitude, longitude), speed and heading of other vessels.
+This project implements a simple vessel collision detection system based on the [Automatic Identification System (AIS)](https://en.wikipedia.org/wiki/Automatic_identification_system). You can receive very high frequency (VHF) signals with software defined radio (SDR), e.g., [SDRangel](https://www.sdrangel.org/) which also processes the signals to the NMEA data format.
+The script connects to SDRangel through a UDP socket and saves receiving [AIVDM/AIVDO messages](https://gpsd.gitlab.io/gpsd/AIVDM.html) in a dataframe. 
+AIVDM/AIVDO sentences are decoded with the [pyais library](https://pypi.org/project/pyais/) to collect the position (latitude, longitude), speed and heading of other vessels.
 The script receives the own ship data from a gps dongle and decodes [NMEA 0183](https://en.wikipedia.org/wiki/NMEA_0183) messages with [pynmea2](https://pypi.org/project/pynmea2/).
 The script then calculates the closest time of approach (cpa) in nautical miles and time to closest time of approach (tcpa) in minutes of own ship to other targets with the [ARPAoCALC Python library](https://github.com/nawre/arpaocalc). If one of the cpa is less than the defined minimum distance to other vessels by the user (= possible collision), the script sends a collision warning (audio signal on Windows using [winsound](https://docs.python.org/3/library/winsound.html) or lights up a led on Raspberry Pi using [RPi.GPIO](https://pypi.org/project/RPi.GPIO/)). 
 
@@ -21,11 +21,11 @@ Static and voyage related data of other vessels is not supported, since data has
 
 STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms established every 60 s on each frequency. Therefore, this script listens to socket for 60 seconds before checking for collisions. 
 
-test_rtlsdr.py is a start to implement signal processing in Python with [rtlsdr](https://pypi.org/project/pyrtlsdr/) to get rid of the UDP socket and SDRangle -> under construction.
+test_rtlsdr.py(https://github.com/helenalendowski/ais_cd/blob/d2542e78e07ceb7a54afbe9f3fd62acbd226d63c/test_rtlsdr.py) is a start to implement signal processing in Python with [rtlsdr](https://pypi.org/project/pyrtlsdr/) to get rid of the UDP socket and SDRangle -> under construction.
 
 ## Hardware requirements
 * OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
-* SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)) to receive very high frequency (VHF)
+* SDR dongle (e.g, RTL-SDR: [Nooelec NESDR SMArt v4](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr/nesdr-smart.html) or [USRPB210](https://www.ettus.com/all-products/ub210-kit/)) to receive VHF
 * VHF antenna
 * GPS serial device (e.g., [Navilock NL-8012U USB](https://www.navilock.com/produkt/62524/merkmale.html))
 
@@ -47,6 +47,12 @@ Requires installation:
 * [pynmea2](https://pypi.org/project/pynmea2/)
 * [RPi.GPIO](https://pypi.org/project/RPi.GPIO/) (Raspberry Pi only) 
 
+## Getting started with SDR
+- [Understand settings and variables ](https://www.rtl-sdr.com/sdrsharp-users-guide/) (explanation for SDR#, but similar to SDRangle) 
+- [SDRangel features overview](https://www.rtl-sdr.com/sdrangel-features-overview-ads-b-apt-dvb-s-dab-ais-vor-aprs-and-many-more-built-in-apps/)
+- Download SDR dongle driver for Windows, e.g., [Zadig](https://zadig.akeo.ie/) or download [Airspy Software Defined Radio Package](https://airspy.com/download/) which includes SDR software and drivers
+- If you face problems with "librtlsdr" on Windows go to the [Osmocom project binary builds](https://osmocom.org/projects/rtl-sdr/wiki/Rtl-sdr#Windows) and download zip "[RelWithDebInfo.zip pre-built Windows version":http://lists.osmocom.org/mailman/listinfo/osmocom-sdr]". See [this YouTube tutorial](https://www.youtube.com/watch?v=XT9pybErVW8) for more instructions.
+
 ## Project set up 
 1. SDRangle
     * [Download SDRAngel](https://www.sdrangel.org/)
@@ -65,6 +71,7 @@ Requires installation:
         * optional: "Add feature" -> "AIS" to see vessels in table
         * "Preferences" -> "Save all"
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
+    * If you face a permission error "serial.serialutil.SerialException: could not open port 'COM6': PermissionError(13, 'Access denied', None, 5)“ [See Windows location service and privacy](https://support.microsoft.com/en-us/windows/windows-location-service-and-privacy-3a8eee0a-5b0b-dc07-eede-2a5ca1c49088)-> Turn on  "Allow apps to access your location" (Start  -> Settings -> Privacy -> Location) and reboot Computer. Several programs cannot access the COM port at the same time. Make sure that you close all other access points. 
     * Find out GPS port and baud rate 
     * Adjust values in collision_detection.py according to your GPS device
     
@@ -93,6 +100,7 @@ Requires installation:
     * Connect LED cathode (shorter LED leg) to a ground pin. 
     * Connect LED anode (longer LED leg) to the positive supply of the circuit. And adjust GPIO pin (led_pin) in collision_detection.py
 4. Install SDRangle, follow the instructions from [Compile-from-source-in-Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux) or [Installing SDRangel for the SDRplay RSP1A and HackRF on a Raspberry Pi](https://www.radiosrs.net/installing_SDRangel.html)
+5. [OpenPlotter SDR VHF](https://github.com/openplotter/openplotter-sdr-vhf)
 
 ### Some useful terminal commands:
 To check your operationg system version and Raspberry model run: 

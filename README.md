@@ -43,3 +43,28 @@ Instructions:
 4. Run collision_detection.py
 
 
+Raspberry Pi set up
+1. Install OpenPlotter OS on Raspberry Pi 4 https://openplotter.readthedocs.io/en/latest/getting_started/downloading.html. You can follow this tutorial: https://www.youtube.com/watch?v=WIW1iKOsoGk on YouTube. 
+1.1 Download OpenPlotter Starting version from: https://cloud.openmarine.net/s/mxrBi5K7zRj2gDq -> unzip the folder
+1.2 Download Raspberry Pi Imager: https://www.raspberrypi.com/software/ and install it. Run it to write the imager that you just unzipped (in 1.1) on the SD card.
+1.3 Put SD card into Raspberry Pi, power it and follow set up wizard (set country, change password (default: "raspberry"), connect to wireless network or plugin network cable, update software).
+1.4 Reboot
+2. Set up gps. you can follow this tutorial: https://www.youtube.com/watch?v=umfw8uLDkc0 on YouTube.
+2.1 Go to "Pi" -> "OpenPlotter" -> "Serial" -> "Devices"
+2.2 Connect gps dongle to one of the Raspberry Pi ports and click "Refresh"
+2.3 Click on the device, enter an alias in lower case letters at least 4 characters (e.g., "gnss"), select "NMEA 0183" for data and press "Apply"
+2.4 Go to the "Connections" tab, click on the device and "Add to Signal K", select "AUTO"
+2.6 To test the hardware open "OpenCPN", if everthing is correct you see three green bars in the upper right corner and a red boat icon on the map which is your location. 
+
+To check your operationg system version and Raspberry model run: 
+    uname -a
+    cat /proc/device-tree/model
+Raspberry Pi GPIO pins: https://pinout.xyz/#
+    pinout
+
+Raspberry Pi software configurations
+    sudo raspi-config
+Go to "Interface Options" -> "P6 Serial Port" -> Would you like a login shell to be accessible over serial? "<No>" -> Would you like the serial port hardware to be enabled" "<Yes>" -> "<Ok>" -> "<Finish>" -> Would you like to reboot now? "<Yes>"
+
+Useful tutorials:
+To get started with Raspberry see for example "Raspberry on a boat - Playlist" (https://www.youtube.com/playlist?list=PLgYS2FpH2f4rLgdJ05F4KAOMvAgsLH1da)

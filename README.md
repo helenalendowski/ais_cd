@@ -47,7 +47,7 @@ Requires installation:
 
 ## Project set up 
 1. SDRangle
-    * Download SDRAngel from https://www.sdrangel.org/ 
+    * [Download SDRAngel](https://www.sdrangel.org/)
     * Install all prerequisites ([Windows](https://github.com/f4exb/sdrangel/wiki/Compile-in-Windows), [Linux](https://github.com/f4exb/sdrangel/wiki/Compile-from-source-in-Linux))
     * See [Quick-start](https://github.com/f4exb/sdrangel/wiki/Quick-start) to navigate through SDRangel and configure settings for RTLSDR-USB to receive AIS messages. See [YouTube tutorial](https://www.youtube.com/watch?v=rTyzEOBs6oI) to get started. 
         * "Add Rx device" -> "Select from list" and choose your SDR device (e.g., "RTL-SDR[0]")

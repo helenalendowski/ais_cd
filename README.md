@@ -21,7 +21,7 @@ Static and voyage related data of other vessels is not supported, since data has
 
 STDMA (Self Organized Time Division Multiple Access): 2250 time slots of 26.6 ms established every 60 s on each frequency. Therefore, this script listens to socket for 60 seconds before checking for collisions. 
 
-test_rtlsdr.py(https://github.com/helenalendowski/ais_cd/blob/d2542e78e07ceb7a54afbe9f3fd62acbd226d63c/test_rtlsdr.py) is a start to implement signal processing in Python with [rtlsdr](https://pypi.org/project/pyrtlsdr/) to get rid of the UDP socket and SDRangle -> under construction.
+[test_rtlsdr.py](https://github.com/helenalendowski/ais_cd/blob/d2542e78e07ceb7a54afbe9f3fd62acbd226d63c/test_rtlsdr.py) is a start to implement signal processing in Python with [rtlsdr](https://pypi.org/project/pyrtlsdr/) to get rid of the UDP socket and SDRangle -> under construction.
 
 ## Hardware requirements
 * OS: Windows or Linux (Note: LED signal warning will only work on Raspberry Pi)
@@ -73,11 +73,11 @@ Requires installation:
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
     * If you face a permission error "serial.serialutil.SerialException: could not open port 'COM6': PermissionError(13, 'Access denied', None, 5)“ [See Windows location service and privacy](https://support.microsoft.com/en-us/windows/windows-location-service-and-privacy-3a8eee0a-5b0b-dc07-eede-2a5ca1c49088)-> Turn on  "Allow apps to access your location" (Start  -> Settings -> Privacy -> Location) and reboot Computer. Several programs cannot access the COM port at the same time. Make sure that you close all other access points. 
     * Find out GPS port and baud rate. In Windows go to "Device Manager" and see list bellow "Ports (COM & LPT)", check port of "u-blox Virtual COM Port (COMXX)" where XX represents a port number. Then right click on device -> Properties -> go to "Connection settings" tab and select bits per second, e.g., 9600 (baud rate). 
-    * Adjust values in collision_detection.py according to your GPS device
+    * Adjust values in [collision_detection.py](https://github.com/helenalendowski/ais_cd/blob/da0b0c05c4142e49f5c9bab87ae573d5bd499329/collision_detection.py) according to your GPS device
     
 3. Start SDRangle 
 
-4. Run collision_detection.py
+4. Run [collision_detection.py](https://github.com/helenalendowski/ais_cd/blob/da0b0c05c4142e49f5c9bab87ae573d5bd499329/collision_detection.py)
 
 
 ## Raspberry Pi 4 

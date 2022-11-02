@@ -70,6 +70,7 @@ Requires installation:
             * [x] UDP 127.0.0.1:5005   Format:NMEA
         * optional: "Add feature" -> "AIS" to see vessels in table
         * "Preferences" -> "Save all"
+        ![SDRangel example set up](/repository/assets/SDRangel.png?raw=true "SDRangel example set up")
 2. GPS set up, e.g., with [u-blocks on Windows](https://canadagps.ca/blogs/knowledgebase-by-platform-windows/connect-a-gps-gnss-receiver-for-windows-maps-windows-10-os)
     * If you face a permission error "serial.serialutil.SerialException: could not open port 'COM6': PermissionError(13, 'Access denied', None, 5)“ [See Windows location service and privacy](https://support.microsoft.com/en-us/windows/windows-location-service-and-privacy-3a8eee0a-5b0b-dc07-eede-2a5ca1c49088)-> Turn on  "Allow apps to access your location" (Start  -> Settings -> Privacy -> Location) and reboot Computer. Several programs cannot access the COM port at the same time. Make sure that you close all other access points. 
     * Find out GPS port and baud rate. In Windows go to "Device Manager" and see list bellow "Ports (COM & LPT)", check port of "u-blox Virtual COM Port (COMXX)" where XX represents a port number. Then right click on device -> Properties -> go to "Connection settings" tab and select bits per second, e.g., 9600 (baud rate). 

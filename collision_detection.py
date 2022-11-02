@@ -42,26 +42,30 @@ import signal
 dataframe = pd.DataFrame()      # to store AIS incoming messages
 seconds_to_listen = 60          # to receive AIS messages for 60s before running collision test
 min_distance = 0.2159827        # minimum distance in nautical mile;     0.00108 Nm = 2m         0.2159827 Nm = 400m
-led_pin = 3
+led_pin = 11
 
 if sys.platform.startswith('win32'):
     # Windows-specific code here...
     import winsound
     platform = 'w'
-    valid_signals = signal.valid_signals()
     print('Platform = Windows')
-    print(f'Valid signals are: {valid_signals}')
-    signal_insert_number = signal.SIGBREAK     # press STRG + fn to insert a new minimum distance
+    port = 'COM6'  # connect to gps: adjust path to gps usb device port. For my setup on Windows it's port COM6
+    # valid_signals = signal.valid_signals()
+    # print(f'Valid signals are: {valid_signals}')
+    # signal_insert_number = signal.SIGBREAK     # press STRG + fn to insert a new minimum distance
 elif sys.platform.startswith('linux'):
     # Linux-specific code here...
     import RPi.GPIO as GPIO                 # library to control raspberry pi LED
     # TODO: RPi.GPIO unsuitable for real-time or timing critical applications
     platform = 'l'
-    # signal_insert_number = signal.SIGBREAK does it exist? or signal.SIGTSTP (CRTL + Z)
+    print('Platform = Linux')
+    port = '/dev/ttyACM0'  # connect to gps: adjust path to gps usb device port
     GPIO.setmode(GPIO.BOARD)
     GPIO.setup(led_pin, GPIO.OUT)
-    valid_signals = signal.valid_signals()
-    print(valid_signals)
+    GPIO.output(led_pin, False)  # turn off LED on Raspberry Pi
+    # valid_signals = signal.valid_signals()
+    # print(f'Valid signals are: {valid_signals}')
+    # signal_insert_number = signal.SIGBREAK does it exist? or signal.SIGTSTP (CRTL + Z)
 else:
     print('Operating system is not supported.')
     sys.exit()
@@ -255,7 +259,7 @@ def set_min_distance():
 
 
 # connect to gps: adjust path to gps usb device port. For my setup on Windows it's port COM6
-MyGPS = SerialGPS("COM6", 9600)
+MyGPS = SerialGPS(port, 9600)
 
 # create UDP socket/ server
 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -304,6 +308,7 @@ try:
 
             if (row['heading'] == 511):     # hading: 511 = N/A, otherwise heading: 0 to 359 degrees
                 heading = row['course']     # NOTE: This is mostly the case! course N/A = 360°
+                # TODO: Program execution when course is also not available? E.g., no collision check?
                 # print('heading not available, set heading to course =', row['course'])
             else:
                 heading = row['heading']

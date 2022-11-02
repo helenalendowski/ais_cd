@@ -80,9 +80,9 @@ Requires installation:
     * Find out GPS port and baud rate. In Windows go to "Device Manager" and see list bellow "Ports (COM & LPT)", check port of "u-blox Virtual COM Port (COMXX)" where XX represents a port number. Then right click on device -> Properties -> go to "Connection settings" tab and select bits per second, e.g., 9600 (baud rate). 
     * Adjust values in [collision_detection.py](https://github.com/helenalendowski/ais_cd/blob/da0b0c05c4142e49f5c9bab87ae573d5bd499329/collision_detection.py) according to your GPS device
     
-3. Start SDRangle 
+3. Start SDRangle (make sure that your SDR dongle is connected to you computer)
 
-4. Run [collision_detection.py](https://github.com/helenalendowski/ais_cd/blob/da0b0c05c4142e49f5c9bab87ae573d5bd499329/collision_detection.py)
+4. Run [collision_detection.py](https://github.com/helenalendowski/ais_cd/blob/da0b0c05c4142e49f5c9bab87ae573d5bd499329/collision_detection.py) (keep GSP and SDR dongle connected to your computer) 
 
 
 ## Raspberry Pi 4 

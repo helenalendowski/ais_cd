@@ -138,4 +138,4 @@ To get started with Raspberry see for example [Raspberry on a boat - Playlist](h
 * ARPAoCALC Python library. Available on: https://github.com/nawre/arpaocalc (last accessed: 10.10.2022)
 
 
-This project was created as part of a university course. I assume no liability and the project can not protect against collisions.
+I assume no liability and the project can not protect against collisions.
